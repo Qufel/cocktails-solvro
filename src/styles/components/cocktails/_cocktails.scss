@@ -1,0 +1,86 @@
+@use "../../abstracts" as *;
+
+.cocktails-grid {
+  display: grid;
+  gap: space(large);
+
+  flex: 1;
+
+  @include xs {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @include xl {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.cocktails-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  @include xs {
+    justify-content: end;
+  }
+
+  @include md {
+    justify-content: space-between;
+  }
+
+  .cocktails-pagination {
+    justify-content: start !important;
+
+    @include xs {
+      display: none;
+    }
+
+    @include md {
+      display: block;
+    }
+  }
+}
+
+.cocktails-options {
+}
+
+.cocktails-container {
+  display: flex;
+  flex-direction: column;
+  gap: space(large);
+  margin-block: space(large);
+
+  flex: 1;
+
+  @include xs {
+    padding-inline: 1rem;
+  }
+
+  @include sm {
+    padding-inline: 2rem;
+  }
+
+  @include md {
+    padding-inline: 3rem;
+  }
+
+  @include lg {
+    padding-inline: 5rem;
+  }
+
+  @include xl {
+    padding-inline: 10rem;
+  }
+}

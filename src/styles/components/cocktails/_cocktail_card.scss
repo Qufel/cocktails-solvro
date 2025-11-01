@@ -1,0 +1,67 @@
+@use "../../abstracts" as *;
+
+.cocktail-card {
+  min-width: 200px;
+  min-height: 300px;
+  padding-block: 0 !important;
+  gap: space(small) !important;
+  overflow: hidden;
+
+  @include xs {
+    height: 550px;
+  }
+
+  @include sm {
+    height: 400px;
+  }
+}
+
+.cocktail-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: space(medium);
+  padding-inline: 0 !important;
+
+  .card-title {
+    display: flex;
+    flex-direction: column;
+    gap: space(small);
+    padding-inline: space(medium) !important;
+    font-size: 1.25rem;
+  }
+
+  .card-description {
+    display: flex;
+    gap: space(x-small);
+    flex-wrap: wrap;
+  }
+}
+
+.card-content {
+  padding-inline: space(medium) !important;
+  font-size: 1rem !important;
+
+  height: 100%;
+
+  overflow: hidden;
+  position: relative;
+  display: block;
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: linear-gradient(transparent 0%, white 85%);
+  }
+}
+
+.cocktail-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: space(medium) space(medium) 0 0;
+}

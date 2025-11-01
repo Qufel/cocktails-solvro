@@ -1,0 +1,91 @@
+import React, { useState } from "react";
+import { getCocktails } from "@/queries";
+import CocktailCard from "./CocktailCard";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import CocktailsPagination from "./CocktailsPagination";
+import CocktailsOptions from "./CocktailsOptions";
+
+export default function Cocktails() {
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(15);
+
+  const [category, setCategory] = useState<string | null>(null);
+  const [glass, setGlass] = useState<string | null>(null);
+
+  const {
+    data: cocktails,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    isFetching,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["cocktails", perPage, category, glass],
+    queryFn: ({ pageParam = { page: page, perPage: perPage } }) =>
+      getCocktails(pageParam.page, pageParam.perPage, category, glass),
+    initialPageParam: { page: page, perPage: perPage },
+    getNextPageParam: (lastPage, pages, lastPageParam) => {
+      if (lastPageParam.page === lastPage?.meta.lastPage) return undefined;
+
+      return { page: lastPageParam.page + 1, perPage: perPage };
+    },
+    getPreviousPageParam: (firstPage, pages, firstPageParam) => {
+      if (firstPageParam.page === 1) return undefined;
+
+      return { page: firstPageParam.page - 1, perPage: perPage };
+    },
+  });
+
+  console.log(cocktails?.pages, page);
+
+  return (
+    <div className="cocktails-container">
+      <div className="cocktails-header">
+        <CocktailsPagination
+          page={page}
+          setPage={setPage}
+          fetchNextPage={fetchNextPage}
+          fetchPreviousPage={fetchPreviousPage}
+          hasNextPage={hasNextPage && !isFetching}
+          hasPreviousPage={page > 1 && !isFetching}
+        />
+        <CocktailsOptions
+          perPage={perPage}
+          category={category}
+          glass={glass}
+          updatePerPage={(value) => {
+            setPerPage(value);
+          }}
+          updateCategory={(value) => {
+            setCategory(value);
+          }}
+          updateGlasses={(value) => {
+            setGlass(value);
+          }}
+          resetPage={() => {
+            setPage(1);
+            refetch();
+          }}
+        />
+      </div>
+      <div className="cocktails-grid">
+        {isFetching && <p>Loading...</p>}
+        {cocktails && cocktails.pages[page - 1]?.data.length === 0 && (
+          <p>No results matching filters.</p>
+        )}
+        {cocktails &&
+          cocktails.pages[page - 1]?.data.map((cocktail: any) => (
+            <CocktailCard cocktail={cocktail} />
+          ))}
+      </div>
+      <CocktailsPagination
+        page={page}
+        setPage={setPage}
+        fetchNextPage={fetchNextPage}
+        fetchPreviousPage={fetchPreviousPage}
+        hasNextPage={hasNextPage && !isFetching}
+        hasPreviousPage={page > 1 && !isFetching}
+      />
+    </div>
+  );
+}

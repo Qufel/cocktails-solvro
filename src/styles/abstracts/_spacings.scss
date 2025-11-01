@@ -1,0 +1,13 @@
+$spacings: (
+  zero: 0rem,
+  xx-small: 0.125rem,
+  x-small: 0.25rem,
+  small: 0.5rem,
+  medium: 1rem,
+  large: 1.25rem,
+  x-large: 2rem,
+);
+
+@function space($size) {
+  @return map-get($spacings, $size);
+}
