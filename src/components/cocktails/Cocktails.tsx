@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { getCocktails } from "@/queries";
 import CocktailCard from "./CocktailCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ export default function Cocktails() {
   const [category, setCategory] = useState<string | null>(null);
   const [glass, setGlass] = useState<string | null>(null);
 
+  // Get infinite scroll for pagination that takes into an account applied filters
   const {
     data: cocktails,
     fetchNextPage,

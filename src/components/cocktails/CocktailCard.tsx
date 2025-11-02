@@ -1,11 +1,7 @@
-import React from "react";
 import {
   Card,
-  CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
@@ -25,11 +21,8 @@ interface Props {
 }
 
 export default function CocktailCard({ cocktail }: Props) {
-  const {
-    data: cocktailInfo,
-    refetch,
-    isEnabled,
-  } = useQuery({
+  // Fetch detailed info about cocktail only when user wants to know it.
+  const { data: cocktailInfo, refetch } = useQuery({
     queryKey: ["cocktail-info", cocktail.id],
     queryFn: () => getCocktail(cocktail.id),
     enabled: false,
@@ -59,7 +52,7 @@ export default function CocktailCard({ cocktail }: Props) {
       <SheetContent className="sheet-content">
         <SheetHeader className="sheet-header">
           <img src={cocktail.imageUrl} alt={cocktail.name} />
-          <SheetTitle>{cocktail.name}</SheetTitle>
+          <SheetTitle className="sheet-title">{cocktail.name}</SheetTitle>
           <div className="badges">
             {" "}
             <Badge variant="outline">{cocktail.category}</Badge>

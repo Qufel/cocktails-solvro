@@ -32,14 +32,23 @@ export default function CocktailsOptions({
   updateGlasses,
   resetPage,
 }: Props) {
+  // Get categories from API
   const { data: categories, isFetching: areCategoriesFetching } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,
   });
+  // Same for glasses
   const { data: glasses, isFetching: areGlassesFetching } = useQuery({
     queryKey: ["glasses"],
     queryFn: getGlasses,
   });
+
+  const resetFilters = () => {
+    updateCategory(null);
+    updateGlasses(null);
+    setFiltered(false);
+    resetPage();
+  };
 
   const [filtered, setFiltered] = useState<boolean>(false);
 
@@ -47,16 +56,7 @@ export default function CocktailsOptions({
     <ButtonGroup className="cocktails-options">
       {filtered && (
         <ButtonGroup>
-          <Button
-            onClick={() => {
-              updateCategory(null);
-              updateGlasses(null);
-              setFiltered(false);
-              resetPage();
-            }}
-          >
-            Clear
-          </Button>
+          <Button onClick={() => resetFilters()}>Clear</Button>
         </ButtonGroup>
       )}
       <ButtonGroup>
