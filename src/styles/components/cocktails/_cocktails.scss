@@ -41,8 +41,6 @@
   }
 
   .cocktails-pagination {
-    justify-content: start !important;
-
     @include xs {
       display: none;
     }
@@ -51,9 +49,6 @@
       display: block;
     }
   }
-}
-
-.cocktails-options {
 }
 
 .cocktails-container {

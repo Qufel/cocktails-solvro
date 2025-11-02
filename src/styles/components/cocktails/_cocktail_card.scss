@@ -27,6 +27,7 @@
     flex-direction: column;
     gap: space(small);
     padding-inline: space(medium) !important;
+    text-align: start;
     font-size: 1.25rem;
   }
 
@@ -71,6 +72,7 @@
   flex-direction: column;
   padding-inline: space(medium);
   padding-block: space(large);
+  overflow-y: auto;
 }
 
 .sheet-header {
