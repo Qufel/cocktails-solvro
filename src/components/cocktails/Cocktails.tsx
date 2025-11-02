@@ -25,12 +25,12 @@ export default function Cocktails() {
     queryFn: ({ pageParam = { page: page, perPage: perPage } }) =>
       getCocktails(pageParam.page, pageParam.perPage, category, glass),
     initialPageParam: { page: page, perPage: perPage },
-    getNextPageParam: (lastPage, pages, lastPageParam) => {
+    getNextPageParam: (lastPage, _pages, lastPageParam) => {
       if (lastPageParam.page === lastPage?.meta.lastPage) return undefined;
 
       return { page: lastPageParam.page + 1, perPage: perPage };
     },
-    getPreviousPageParam: (firstPage, pages, firstPageParam) => {
+    getPreviousPageParam: (_firstPage, _pages, firstPageParam) => {
       if (firstPageParam.page === 1) return undefined;
 
       return { page: firstPageParam.page - 1, perPage: perPage };
