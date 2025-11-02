@@ -14,6 +14,12 @@ export const getCocktails = async (
   return fetch(url).then((res) => res.json());
 };
 
+export const getCocktail = async (id: number) => {
+  return fetch(`https://cocktails.solvro.pl/api/v1/cocktails/${id}`).then(
+    (res) => res.json()
+  );
+};
+
 export const getCategories = async () => {
   return fetch("https://cocktails.solvro.pl/api/v1/cocktails/categories").then(
     (res) => res.json()

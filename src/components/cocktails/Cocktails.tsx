@@ -36,8 +36,6 @@ export default function Cocktails() {
     },
   });
 
-  console.log(cocktails?.pages, page);
-
   return (
     <div className="cocktails-container">
       <div className="cocktails-header">
@@ -74,9 +72,11 @@ export default function Cocktails() {
           <p>No results matching filters.</p>
         )}
         {cocktails &&
-          cocktails.pages[page - 1]?.data.map((cocktail: any) => (
-            <CocktailCard cocktail={cocktail} />
-          ))}
+          cocktails.pages[page - 1]?.data.map(
+            (cocktail: any, index: number) => (
+              <CocktailCard cocktail={cocktail} key={index} />
+            )
+          )}
       </div>
       <CocktailsPagination
         page={page}

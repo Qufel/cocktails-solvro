@@ -2,17 +2,16 @@
 
 .cocktail-card {
   min-width: 200px;
-  min-height: 300px;
-  padding-block: 0 !important;
+  height: 100%;
+  padding-top: 0 !important;
+  padding-bottom: space(small);
   gap: space(small) !important;
   overflow: hidden;
 
-  @include xs {
-    height: 550px;
-  }
-
-  @include sm {
-    height: 400px;
+  transition: scale 0.2s;
+  &:hover {
+    transition: scale 0.5s;
+    scale: 1.05;
   }
 }
 
@@ -24,6 +23,7 @@
 
   .card-title {
     display: flex;
+    align-items: start;
     flex-direction: column;
     gap: space(small);
     padding-inline: space(medium) !important;
@@ -64,4 +64,29 @@
   aspect-ratio: 1 / 1;
   height: auto;
   border-radius: space(medium) space(medium) 0 0;
+}
+
+.sheet-content {
+  display: flex;
+  flex-direction: column;
+  padding-inline: space(medium);
+  padding-block: space(large);
+}
+
+.sheet-header {
+  display: flex;
+  flex-direction: column;
+  gap: space(small);
+
+  padding: 0;
+
+  img {
+    border-radius: space(medium);
+  }
+}
+
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
