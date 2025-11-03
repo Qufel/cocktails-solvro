@@ -47,8 +47,9 @@ export default function Cocktails() {
           setPage={setPage}
           fetchNextPage={fetchNextPage}
           fetchPreviousPage={fetchPreviousPage}
-          hasNextPage={hasNextPage && !isFetching}
-          hasPreviousPage={page > 1 && !isFetching}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={page > 1}
+          isFetching={isFetching}
         />
         <CocktailsOptions
           perPage={perPage}

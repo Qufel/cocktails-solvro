@@ -27,8 +27,23 @@
     flex-direction: column;
     gap: space(small);
     padding-inline: space(medium) !important;
-    text-align: start;
-    font-size: 1.25rem;
+
+    .title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: start;
+      font-size: 1.25rem;
+      gap: space(small);
+      width: 100%;
+      min-height: 2rem;
+
+      .heart {
+        aspect-ratio: 1 / 1;
+        width: 40px;
+      }
+    }
   }
 
   .card-description {

@@ -15,6 +15,8 @@ import {
 } from "../ui/sheet";
 import { useQuery } from "@tanstack/react-query";
 import { getCocktail } from "@/queries";
+import { useState } from "react";
+import LikeCocktailButton from "./LikeCocktailButton";
 
 interface Props {
   cocktail: any;
@@ -28,6 +30,34 @@ export default function CocktailCard({ cocktail }: Props) {
     enabled: false,
   });
 
+  const [favourite, setFavourtie] = useState<boolean>(
+    localStorage.getItem("favourites") === null
+      ? false
+      : JSON.parse(localStorage.getItem("favourites") as string).indexOf(
+          cocktail.id
+        ) > -1
+  );
+
+  const likeCocktail = (id: number) => {
+    const item: string | null = localStorage.getItem("favourites");
+    var favourites: number[];
+    if (item === null) {
+      favourites = [];
+      favourites.push(id);
+      setFavourtie(true);
+    } else {
+      favourites = JSON.parse(item);
+      if (favourites.indexOf(id) > -1) {
+        favourites.splice(favourites.indexOf(id), 1);
+        setFavourtie(false);
+      } else {
+        favourites.push(id);
+        setFavourtie(true);
+      }
+    }
+    localStorage.setItem("favourites", JSON.stringify(favourites));
+  };
+
   return (
     <Sheet>
       <SheetTrigger onClick={() => refetch()}>
@@ -39,7 +69,28 @@ export default function CocktailCard({ cocktail }: Props) {
               alt={cocktail.name}
             />
             <div className="card-title">
-              <CardTitle className="title">{cocktail.name}</CardTitle>
+              <CardTitle className="title">
+                <h3>{cocktail.name}</h3>
+                {favourite && (
+                  <svg
+                    className="heart"
+                    width="24px"
+                    height="24px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    color="#000000"
+                    stroke-width="1.5"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M11.9999 3.94228C13.1757 2.85872 14.7069 2.25 16.3053 2.25C18.0313 2.25 19.679 2.95977 20.8854 4.21074C22.0832 5.45181 22.75 7.1248 22.75 8.86222C22.75 10.5997 22.0831 12.2728 20.8854 13.5137C20.089 14.3393 19.2938 15.1836 18.4945 16.0323C16.871 17.7562 15.2301 19.4985 13.5256 21.14L13.5216 21.1438C12.6426 21.9779 11.2505 21.9476 10.409 21.0754L3.11399 13.5136C0.62867 10.9374 0.62867 6.78707 3.11399 4.21085C5.54605 1.68984 9.46239 1.60032 11.9999 3.94228Z"
+                      fill="#000000"
+                    ></path>
+                  </svg>
+                )}
+              </CardTitle>
               <CardDescription className="card-description">
                 <Badge variant="outline">{cocktail.category}</Badge>
                 <Badge variant="outline">{cocktail.glass}</Badge>
@@ -74,6 +125,11 @@ export default function CocktailCard({ cocktail }: Props) {
             )}
           </ul>
         </div>
+        <LikeCocktailButton
+          id={cocktail.id}
+          like={likeCocktail}
+          favourite={favourite}
+        />
       </SheetContent>
     </Sheet>
   );
