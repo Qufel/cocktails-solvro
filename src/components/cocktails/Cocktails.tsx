@@ -4,6 +4,7 @@ import CocktailCard from "./CocktailCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import CocktailsPagination from "./CocktailsPagination";
 import CocktailsOptions from "./CocktailsOptions";
+import { PulseLoader } from "react-spinners";
 
 export default function Cocktails() {
   const [page, setPage] = useState(1);
@@ -19,6 +20,7 @@ export default function Cocktails() {
     fetchPreviousPage,
     hasNextPage,
     isFetching,
+    isLoading,
     refetch,
   } = useInfiniteQuery({
     queryKey: ["cocktails", perPage, category, glass],
@@ -67,8 +69,8 @@ export default function Cocktails() {
           }}
         />
       </div>
+      {isLoading && <PulseLoader className="loader" color="#171717" />}
       <div className="cocktails-grid">
-        {isFetching && <p>Loading...</p>}
         {cocktails && cocktails.pages[page - 1]?.data.length === 0 && (
           <p>No results matching filters.</p>
         )}
@@ -84,8 +86,9 @@ export default function Cocktails() {
         setPage={setPage}
         fetchNextPage={fetchNextPage}
         fetchPreviousPage={fetchPreviousPage}
-        hasNextPage={hasNextPage && !isFetching}
-        hasPreviousPage={page > 1 && !isFetching}
+        hasNextPage={hasNextPage}
+        hasPreviousPage={page > 1}
+        isFetching={isFetching}
       />
     </div>
   );

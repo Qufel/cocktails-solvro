@@ -57,6 +57,8 @@
   gap: space(large);
   margin-block: space(large);
 
+  align-items: center;
+
   flex: 1;
 
   @include xs {

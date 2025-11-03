@@ -14,6 +14,7 @@ interface Props {
   fetchPreviousPage: () => void;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  isFetching: boolean;
 }
 
 export default function CocktailsPagination({
@@ -23,6 +24,7 @@ export default function CocktailsPagination({
   fetchPreviousPage,
   hasNextPage,
   hasPreviousPage,
+  isFetching,
 }: Props) {
   return (
     <Pagination className="cocktails-pagination">
@@ -31,8 +33,10 @@ export default function CocktailsPagination({
           <PaginationItem>
             <PaginationPrevious
               onClick={() => {
-                fetchPreviousPage();
-                setPage(page - 1);
+                if (!isFetching) {
+                  fetchPreviousPage();
+                  setPage(page - 1);
+                }
               }}
             />
           </PaginationItem>
@@ -44,8 +48,10 @@ export default function CocktailsPagination({
           <PaginationItem>
             <PaginationNext
               onClick={() => {
-                fetchNextPage();
-                setPage(page + 1);
+                if (!isFetching) {
+                  fetchNextPage();
+                  setPage(page + 1);
+                }
               }}
             />
           </PaginationItem>
