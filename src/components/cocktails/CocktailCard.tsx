@@ -15,7 +15,7 @@ import {
 } from "../ui/sheet";
 import { useQuery } from "@tanstack/react-query";
 import { getCocktail } from "@/queries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LikeCocktailButton from "./LikeCocktailButton";
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function CocktailCard({ cocktail }: Props) {
-  // Fetch detailed info about cocktail only when user wants to know it.
+  // Fetch detailed info about cocktail only when user wants   to know it.
   const { data: cocktailInfo, refetch } = useQuery({
     queryKey: ["cocktail-info", cocktail.id],
     queryFn: () => getCocktail(cocktail.id),
@@ -37,6 +37,15 @@ export default function CocktailCard({ cocktail }: Props) {
           cocktail.id
         ) > -1
   );
+
+  useEffect(() => {
+    const item = localStorage.getItem("favourites");
+    const isFavourite =
+      item === null
+        ? false
+        : JSON.parse(item as string).indexOf(cocktail.id) > -1;
+    setFavourtie(isFavourite);
+  }, [cocktail.id]);
 
   const likeCocktail = (id: number) => {
     const item: string | null = localStorage.getItem("favourites");
@@ -63,33 +72,35 @@ export default function CocktailCard({ cocktail }: Props) {
       <SheetTrigger onClick={() => refetch()}>
         <Card className="w-full max-w-sm cocktail-card">
           <div className="cocktail-header">
-            <img
-              className="cocktail-image"
-              src={cocktail.imageUrl}
-              alt={cocktail.name}
-            />
-            <div className="card-title">
-              <CardTitle className="title">
-                <h3>{cocktail.name}</h3>
-                {favourite && (
+            <div className="cocktail-image">
+              <img
+                className="cocktail-image"
+                src={cocktail.imageUrl}
+                alt={cocktail.name}
+              />
+              {favourite && (
+                <div className="favourite-box">
                   <svg
-                    className="heart"
-                    width="24px"
-                    height="24px"
                     viewBox="0 0 24 24"
-                    fill="none"
+                    fill="var(--icon-color)"
                     xmlns="http://www.w3.org/2000/svg"
-                    color="#000000"
-                    stroke-width="1.5"
                   >
                     <path
                       fill-rule="evenodd"
                       clip-rule="evenodd"
-                      d="M11.9999 3.94228C13.1757 2.85872 14.7069 2.25 16.3053 2.25C18.0313 2.25 19.679 2.95977 20.8854 4.21074C22.0832 5.45181 22.75 7.1248 22.75 8.86222C22.75 10.5997 22.0831 12.2728 20.8854 13.5137C20.089 14.3393 19.2938 15.1836 18.4945 16.0323C16.871 17.7562 15.2301 19.4985 13.5256 21.14L13.5216 21.1438C12.6426 21.9779 11.2505 21.9476 10.409 21.0754L3.11399 13.5136C0.62867 10.9374 0.62867 6.78707 3.11399 4.21085C5.54605 1.68984 9.46239 1.60032 11.9999 3.94228Z"
-                      fill="#000000"
-                    ></path>
+                      d="M11.9932 5.13581C9.9938 2.7984 6.65975 2.16964 4.15469 4.31001C1.64964 6.45038 1.29697 10.029 3.2642 12.5604C4.89982 14.6651 9.84977 19.1041 11.4721 20.5408C11.6536 20.7016 11.7444 20.7819 11.8502 20.8135C11.9426 20.8411 12.0437 20.8411 12.1361 20.8135C12.2419 20.7819 12.3327 20.7016 12.5142 20.5408C14.1365 19.1041 19.0865 14.6651 20.7221 12.5604C22.6893 10.029 22.3797 6.42787 19.8316 4.31001C17.2835 2.19216 13.9925 2.7984 11.9932 5.13581Z"
+                      stroke="var(--icon-color)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-                )}
+                </div>
+              )}
+            </div>
+            <div className="card-title">
+              <CardTitle className="title">
+                <h3>{cocktail.name}</h3>
               </CardTitle>
               <CardDescription className="card-description">
                 <Badge variant="outline">{cocktail.category}</Badge>
@@ -101,29 +112,31 @@ export default function CocktailCard({ cocktail }: Props) {
         </Card>
       </SheetTrigger>
       <SheetContent className="sheet-content">
-        <SheetHeader className="sheet-header">
-          <img src={cocktail.imageUrl} alt={cocktail.name} />
-          <SheetTitle className="sheet-title">{cocktail.name}</SheetTitle>
-          <div className="badges">
-            {" "}
-            <Badge variant="outline">{cocktail.category}</Badge>
-            <Badge variant="outline">{cocktail.glass}</Badge>
+        <div className="sheet-body">
+          <SheetHeader className="sheet-header">
+            <img src={cocktail.imageUrl} alt={cocktail.name} />
+            <SheetTitle className="sheet-title">{cocktail.name}</SheetTitle>
+            <div className="badges">
+              {" "}
+              <Badge variant="outline">{cocktail.category}</Badge>
+              <Badge variant="outline">{cocktail.glass}</Badge>
+            </div>
+            <SheetDescription>{cocktail.instructions}</SheetDescription>
+          </SheetHeader>
+          <div className="ingredients">
+            <ul>
+              {cocktailInfo?.data.ingredients.map(
+                (ingredient: any, index: number) => {
+                  return (
+                    <li className="ingredient" key={index}>
+                      <h5>{ingredient.name}</h5>
+                      <p>{ingredient.measure}</p>
+                    </li>
+                  );
+                }
+              )}
+            </ul>
           </div>
-          <SheetDescription>{cocktail.instructions}</SheetDescription>
-        </SheetHeader>
-        <div className="ingredients">
-          <ul>
-            {cocktailInfo?.data.ingredients.map(
-              (ingredient: any, index: number) => {
-                return (
-                  <li className="ingredient" key={index}>
-                    <h5>{ingredient.name}</h5>
-                    <p>{ingredient.measure}</p>
-                  </li>
-                );
-              }
-            )}
-          </ul>
         </div>
         <LikeCocktailButton
           id={cocktail.id}
