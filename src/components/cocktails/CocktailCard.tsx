@@ -17,14 +17,21 @@ import { useQuery } from "@tanstack/react-query";
 import { getCocktail } from "@/queries";
 import { useEffect, useState } from "react";
 import LikeCocktailButton from "./LikeCocktailButton";
+import CocktailIngredients from "./CocktailIngredients";
+import { PulseLoader } from "react-spinners";
 
 interface Props {
   cocktail: any;
+  pending: boolean;
 }
 
-export default function CocktailCard({ cocktail }: Props) {
+export default function CocktailCard({ cocktail, pending }: Props) {
   // Fetch detailed info about cocktail only when user wants   to know it.
-  const { data: cocktailInfo, refetch } = useQuery({
+  const {
+    data: cocktailInfo,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["cocktail-info", cocktail.id],
     queryFn: () => getCocktail(cocktail.id),
     enabled: false,
@@ -73,11 +80,15 @@ export default function CocktailCard({ cocktail }: Props) {
         <Card className="w-full max-w-sm cocktail-card">
           <div className="cocktail-header">
             <div className="cocktail-image">
-              <img
-                className="cocktail-image"
-                src={cocktail.imageUrl}
-                alt={cocktail.name}
-              />
+              {pending ? (
+                <PulseLoader className="loader" color="#171717" />
+              ) : (
+                <img
+                  className="cocktail-image"
+                  src={cocktail.imageUrl}
+                  alt={cocktail.name}
+                />
+              )}
               {favourite && (
                 <div className="favourite-box">
                   <svg
@@ -121,22 +132,19 @@ export default function CocktailCard({ cocktail }: Props) {
               <Badge variant="outline">{cocktail.category}</Badge>
               <Badge variant="outline">{cocktail.glass}</Badge>
             </div>
-            <SheetDescription>{cocktail.instructions}</SheetDescription>
           </SheetHeader>
-          <div className="ingredients">
-            <ul>
-              {cocktailInfo?.data.ingredients.map(
-                (ingredient: any, index: number) => {
-                  return (
-                    <li className="ingredient" key={index}>
-                      <h5>{ingredient.name}</h5>
-                      <p>{ingredient.measure}</p>
-                    </li>
-                  );
-                }
-              )}
-            </ul>
-          </div>
+          {isLoading ? (
+            <PulseLoader className="loader" color="#171717" />
+          ) : (
+            <>
+              <SheetDescription>
+                {cocktailInfo?.data.instructions}
+              </SheetDescription>
+              <CocktailIngredients
+                ingredients={cocktailInfo?.data.ingredients}
+              />
+            </>
+          )}
         </div>
         <LikeCocktailButton
           id={cocktail.id}

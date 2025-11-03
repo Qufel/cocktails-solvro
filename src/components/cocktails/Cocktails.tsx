@@ -21,6 +21,7 @@ export default function Cocktails() {
     hasNextPage,
     isFetching,
     isLoading,
+    isPending,
     refetch,
   } = useInfiniteQuery({
     queryKey: ["cocktails", perPage, category, glass],
@@ -70,7 +71,9 @@ export default function Cocktails() {
           }}
         />
       </div>
-      {isLoading && <PulseLoader className="loader" color="#171717" />}
+      {isLoading && isFetching && isPending && (
+        <PulseLoader className="loader" color="#171717" />
+      )}
       <div className="cocktails-grid">
         {cocktails && cocktails.pages[page - 1]?.data.length === 0 && (
           <p>No results matching filters.</p>
@@ -78,7 +81,11 @@ export default function Cocktails() {
         {cocktails &&
           cocktails.pages[page - 1]?.data.map(
             (cocktail: any, index: number) => (
-              <CocktailCard cocktail={cocktail} key={index} />
+              <CocktailCard
+                cocktail={cocktail}
+                key={index}
+                pending={isFetching}
+              />
             )
           )}
       </div>
@@ -89,7 +96,7 @@ export default function Cocktails() {
         fetchPreviousPage={fetchPreviousPage}
         hasNextPage={hasNextPage}
         hasPreviousPage={page > 1}
-        isFetching={isFetching}
+        isFetching={isFetching || isLoading || isPending}
       />
     </div>
   );

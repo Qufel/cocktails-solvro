@@ -1,0 +1,24 @@
+@use "../../abstracts" as *;
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: space(small);
+
+  h4 {
+    font-weight: 600;
+    font-size: 1rem !important;
+  }
+
+  .ingredient {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: space(x-small);
+    width: 100%;
+
+    .measure {
+      color: color-mix(in hsl, var(--primary), #0000 40%);
+    }
+  }
+}
