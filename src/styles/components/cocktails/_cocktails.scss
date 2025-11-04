@@ -4,27 +4,10 @@
   display: grid;
   gap: space(large);
 
+  width: 100%;
   flex: 1;
 
-  @include xs {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  @include sm {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include md {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @include lg {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @include xl {
-    grid-template-columns: repeat(5, 1fr);
-  }
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
 }
 
 .cocktails-header {
